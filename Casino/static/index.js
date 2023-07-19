@@ -1,18 +1,25 @@
 document.addEventListener('DOMContentLoaded', function() {
-    count=0;
-    hands=0;
-    min=0;
-    max=0;
-    xArray = [];
-    yArray = [];
+   
     document.getElementById('countBtn').addEventListener("click", ()=> {
-
-
-            for(i=0;i<1000;i++){
+        lines = 10;
+        data=[];
+        min=0;
+        max=0;
+        for(a=0;a<lines;a++){
+            handTest = document.getElementById('hands').value;
+            count=0;
+            hands=0;
+            xArray = [];
+            yArray = [];
+            xArrayAvg = [];
+            yArrayAvg = []; 
+            bet = 10;
+            console.log(handTest);
+            for(i=0;i<handTest;i++){
                 if (Math.random() > .495) {
-                    count+=5;
+                    count+=bet;
                 } else {
-                    count-=5;
+                    count-=bet;
                 }
                 hands++;
                 if(count<min){
@@ -21,9 +28,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 if(count>max){
                     max=count
                 }
-                if(i%10==0){
+                if(i%5==0){
                     xArray.push(hands);
                     yArray.push(count);
+                    xArrayAvg.push(hands );
+                    yArrayAvg.push(bet * hands* 0.01);
                 }
             }
 
@@ -34,21 +43,30 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
             // Define Data
-            const data = [{
+            const data1 = {
             x: xArray,
             y: yArray,
-            mode:"markers"
-            }];
-
-            // Define Layout
-            const layout = {
-            xaxis: {range: [0, hands], title: "Square Meters"},
-            yaxis: {range: [min, max], title: "Price in Millions"},
-            title: "House Prices vs. Size"
+            mode:"scatter"
             };
 
-            // Display with Plotly
-            Plotly.newPlot("myPlot", data, layout);
+            const data2 = {
+                x: xArrayAvg,
+                y: yArrayAvg,
+                mode:"scatter"
+                };
+
+            data.push(data1);
+
+            // Define Layout
+
+            }
+        const layout = {
+            xaxis: {range: [0, hands], title: "Hands"},
+            yaxis: {range: [min + min*.1, max + max*.1], title: "Profit"},
+            title: "Profit from Hands Played"
+            };
+        // Display with Plotly
+        Plotly.newPlot("myPlot", data, layout);
         });
 
 
